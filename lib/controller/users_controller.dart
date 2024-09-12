@@ -30,7 +30,6 @@ class UsersController {
     }
   }
   
-
   // Buscar todos os usuarios
   Stream<List<Map<String, dynamic>>> listarUsuarios() {
     return usuarioRef.snapshots().map((querySnapshot) {
