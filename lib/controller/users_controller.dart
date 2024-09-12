@@ -29,6 +29,7 @@ class UsersController {
       print('Erro ao deletar usuario: $e');
     }
   }
+  
 
   // Buscar todos os usuarios
   Stream<List<Map<String, dynamic>>> listarUsuarios() {
