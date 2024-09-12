@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "849575801019",
+    "project_id": "ybarber-b4146",
+    "storage_bucket": "ybarber-b4146.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:849575801019:android:f9f9e36b2b46086e4db99e",
+        "android_client_info": {
+          "package_name": "com.ybarber.ap"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6EbA8NGCrz-GBrcVuuzjaCPs5lXmj47E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
