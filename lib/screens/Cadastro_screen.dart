@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-
-
+import 'package:ybarber/controller/users_controller.dart';
 
 class CadastroPage extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nomeController = TextEditingController();
+  final TextEditingController senhaController = TextEditingController();
+  final TextEditingController confirmeSenhaController = TextEditingController();
+  final TextEditingController telefoneController = TextEditingController();
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,27 +19,69 @@ class CadastroPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
+              controller: emailController,
               decoration: InputDecoration(labelText: "Email"),
             ),
             TextField(
+              controller: nomeController,
+              decoration: InputDecoration(labelText: "Nome"),
+            ),
+            TextField(
+              controller: senhaController,
               decoration: InputDecoration(labelText: "Senha"),
               obscureText: true,
             ),
             TextField(
+              controller: confirmeSenhaController,
               decoration: InputDecoration(labelText: "Confirme a Senha"),
               obscureText: true,
             ),
+            TextField(
+              controller: telefoneController,
+              decoration: InputDecoration(labelText: "Telefone"),
+            ),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: () {}, child: Text("Cadastrar")),
-            TextButton(onPressed: () {Navigator.pushNamed(context, '/login');}, child: Text("Ja tem login? acessar")),
+            ElevatedButton(
+              onPressed: () async {UsersController usersController = UsersController();
+               if (senhaController.text != confirmeSenhaController.text) {
+                  print('As senhas não coincidem');
+                  return;
+                }
+                Map<String, dynamic> usuarioData = {
+                  'email': emailController.text,
+                  'nome': nomeController.text,
+                  'senha': senhaController.text,
+                  'telefone': telefoneController.text,
+                  'tipo': 'cliente', 
+                };
+
+                await usersController.adicionarUsuario(usuarioData);
+
+                print('Usuário cadastrado com sucesso!');
+              }, 
+              child: Text("Cadastrar")
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/login');
+              }, 
+              child: Text("Ja tem login? Acessar")
+            ),
           ],
         ),
       ),
     );
   }
+
+  
+  void adicionarUsuario(String email, String nome, String senha, String confirmeSenha, String telefone) {
+    if (senha != confirmeSenha) {
+      print('As senhas não coincidem');
+      return;
+    }
+   
+  }
 }
-
-
 
 /*
 

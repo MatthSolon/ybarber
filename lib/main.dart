@@ -36,7 +36,7 @@ class ybarber extends StatelessWidget {
       '/agendamentos': (context) => AgendamentosFuturosPage(),
       '/perfil': (context) => PerfilPage(),
       '/configuracoes': (context) => ConfiguracoesPage(),
-      '/login': (context) => LoginScreen(),
+      '/login': (context) => LoginPage(),
       '/cadastro': (context) => CadastroPage(),
       },
     );
