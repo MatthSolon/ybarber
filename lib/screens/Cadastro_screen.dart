@@ -21,10 +21,12 @@ class CadastroPage extends StatelessWidget {
             TextField(
               controller: emailController,
               decoration: InputDecoration(labelText: "Email"),
+              
             ),
             TextField(
               controller: nomeController,
               decoration: InputDecoration(labelText: "Nome"),
+              
             ),
             TextField(
               controller: senhaController,

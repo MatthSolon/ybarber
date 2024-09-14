@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      Navigator.pushReplacementNamed(context, '/register');  // Navega para a tela de cadastro
+      Navigator.pushReplacementNamed(context, '/register'); 
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao fazer login: $e')),
@@ -83,24 +84,23 @@ class _LoginScreenState extends State<LoginScreen> {
               
             ),
             
-            TextButton(onPressed: () {}, child: Text("Esqueci minha senha")),
-            TextButton(onPressed: () {Navigator.pushNamed(context, '/cadastro');}, child: Text("Registrar"))
+            
           ],
         ),
       ),
     );
   }
 }
-/*
+*/
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
 
@@ -111,18 +111,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
     // Busca o documento no Firestore usando o email
     QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('clientes')
+        .collection('usuarios')
         .where('email', isEqualTo: email)
         .get();
 
     if (snapshot.docs.isNotEmpty) {
       // Usuário encontrado, vamos comparar as senhas
-      var clienteData = snapshot.docs.first.data() as Map<String, dynamic>;
+      var usuarioData = snapshot.docs.first.data() as Map<String, dynamic>;
 
-      if (clienteData['senha'] == senha) {
+      if (usuarioData['senha'] == senha) {
         // Login válido
         print('Login bem-sucedido!');
-        // Aqui você pode redirecionar o usuário ou mostrar outra tela
+        Navigator.pushNamed(context, '/home');
       } else {
         // Senha incorreta
         print('Senha incorreta');
@@ -160,10 +160,11 @@ class _LoginScreenState extends State<LoginScreen> {
               },
               child: Text("Login"),
             ),
+            TextButton(onPressed: () {}, child: Text("Esqueci minha senha")),
+            TextButton(onPressed: () {Navigator.pushNamed(context, '/cadastro');}, child: Text("Registrar"))
           ],
         ),
       ),
     );
   }
 }
-*/

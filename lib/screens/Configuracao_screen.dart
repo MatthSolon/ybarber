@@ -8,9 +8,9 @@ class ConfiguracoesPage extends StatefulWidget {
 }
 
 class _ConfiguracoesPage extends State<ConfiguracoesPage> {
-  final _serviceNameController = TextEditingController();
-  final _servicePriceController = TextEditingController();
-  final _employeeNameController = TextEditingController();
+  final _servicoNomeController = TextEditingController();
+  final _servicoPrecoController = TextEditingController();
+  final _usuarioNomeController = TextEditingController();
   final _employeeRoleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -18,19 +18,19 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
 
   @override
   void dispose() {
-    _serviceNameController.dispose();
-    _servicePriceController.dispose();
-    _employeeNameController.dispose();
+    _servicoNomeController.dispose();
+    _servicoPrecoController.dispose();
+    _usuarioNomeController.dispose();
     _employeeRoleController.dispose();
     super.dispose();
   }
 
-  Future<void> _addService() async {
+  Future<void> _addServicos() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseFirestore.instance.collection('services').add({
-          'name': _serviceNameController.text,
-          'price': double.parse(_servicePriceController.text),
+        await FirebaseFirestore.instance.collection('Servicos').add({
+          'name': _servicoNomeController.text,
+          'price': double.parse(_servicoPrecoController.text),
         });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Serviço cadastrado com sucesso!')),
@@ -43,11 +43,11 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
     }
   }
 
-  Future<void> _addEmployee() async {
+  Future<void> _addUsers() async {
     if (_formKey.currentState!.validate()) {
       try {
         await FirebaseFirestore.instance.collection('employees').add({
-          'name': _employeeNameController.text,
+          'name': _usuarioNomeController.text,
           'role': _employeeRoleController.text,
           'isAvailable': true, // Padrão disponível
         });
@@ -62,27 +62,25 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
     }
   }
 
-  // Verifica se o usuário logado é o proprietário
   bool _isOwner() {
     final user = _auth.currentUser;
-    return user != null && user.email == 'proprietario@salon.com';  // Exemplo de e-mail do proprietário
+    return user != null && user.email == 'admin@ybarber.com';  
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Cadastro de Serviços e Funcionários')),
-      body: _isOwner()  // Verifica se o usuário é o proprietário
-          ? Padding(
+      body: _isOwner()? 
+            Padding(
               padding: const EdgeInsets.all(16.0),
               child: Form(
                 key: _formKey,
                 child: ListView(
                   children: [
-                    // Cadastro de Serviços
                     Text('Cadastrar Serviço', style: TextStyle(fontSize: 18)),
                     TextFormField(
-                      controller: _serviceNameController,
+                      controller: _servicoNomeController,
                       decoration: InputDecoration(labelText: 'Nome do Serviço'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -92,7 +90,7 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
                       },
                     ),
                     TextFormField(
-                      controller: _servicePriceController,
+                      controller: _servicoPrecoController,
                       decoration: InputDecoration(labelText: 'Preço do Serviço'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -104,16 +102,15 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: _addService,
+                      onPressed: _addServicos,
                       child: Text('Cadastrar Serviço'),
                     ),
 
                     SizedBox(height: 32),
 
-                    // Cadastro de Funcionários
                     Text('Cadastrar Funcionário', style: TextStyle(fontSize: 18)),
                     TextFormField(
-                      controller: _employeeNameController,
+                      controller: _usuarioNomeController,
                       decoration: InputDecoration(labelText: 'Nome do Funcionário'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -134,7 +131,7 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
                     ),
                     SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: _addEmployee,
+                      onPressed: _addUsers,
                       child: Text('Cadastrar Funcionário'),
                     ),
                   ],
