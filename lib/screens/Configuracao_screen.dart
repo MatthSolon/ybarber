@@ -16,7 +16,6 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
   final _employeeRoleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void dispose() {
