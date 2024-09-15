@@ -27,23 +27,23 @@ void _goToCadastroScreen() {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-             const Text(
+              Text(
               'Seja Bem vindo',
               style: TextStyle(fontSize: 24,  color: Color.fromARGB(255, 255, 255, 255)),
             ),
-             const SizedBox(height: 16),
+              SizedBox(height: 16),
             Image.asset(
               'imagens/logo.png',
               height: 300,
             ),
             
-             const SizedBox(height: 16),
-             const Text(
+              SizedBox(height: 16),
+              Text(
               'Marque seu horario com facilidade e rapidez, tudo com a palma de sua mão',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 255, 255, 255)),
             ),
-             const SizedBox(height: 32),
+              SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -53,27 +53,28 @@ void _goToCadastroScreen() {
                   style: ElevatedButton.styleFrom(
                     backgroundColor:   Colors.blue,
                     foregroundColor: Colors.white,
-                    padding:   EdgeInsets.symmetric(
+                    padding:   const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 16),
-                    textStyle:   TextStyle(fontSize: 16),
+                    textStyle:   const TextStyle(fontSize: 16),
                   ),
-                  child:   Text('Login', ),
+                  child:   const Text('Login', ),
                 ),
-                  SizedBox(width: 16),
-                  //botão cadastro
+                  const SizedBox(width: 16),
+               
                 ElevatedButton(
                   onPressed: _goToCadastroScreen,
                   style: ElevatedButton.styleFrom(
                     backgroundColor:   Colors.blueGrey,
                     foregroundColor: Colors.white,
-                    padding:   EdgeInsets.symmetric(
+                    padding:   const EdgeInsets.symmetric(
                         horizontal: 32, vertical: 16),
-                    textStyle:   TextStyle(fontSize: 16,),
+                    textStyle:   const TextStyle(fontSize: 16,),
                   ),
-                  child:   Text('Cadastro'),
+                  child:   const Text('Cadastro'),
                 ),
+               
               ],
-            ),
+            ),            
           ],
         ),
       ),

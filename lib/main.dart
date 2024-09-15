@@ -12,7 +12,7 @@ import 'screens/Home_screen.dart';
 
 void main() {
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(ybarber());  
+  runApp(const ybarber());  
   
 }
 
@@ -29,7 +29,7 @@ class ybarber extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home:  ChoseScreen(title: 'Ybarber',),
+      home:  const ChoseScreen(title: 'Ybarber',),
       routes: {
       '/home': (context) => HomePage(),
       '/agendamento': (context) => AgendamentoPage(),

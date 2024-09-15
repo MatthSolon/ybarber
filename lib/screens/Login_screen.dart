@@ -1,101 +1,9 @@
-/*
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-
-class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Login")),
-      body: Padding(
-        padding:  EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              decoration: InputDecoration(labelText: "Email"),
-            ),
-            TextField(
-              decoration: InputDecoration(labelText: "Senha"),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: () {
-
-            }, child: Text("Login")),
-            TextButton(onPressed: () {}, child: Text("Esqueci minha senha")),
-            TextButton(onPressed: () {Navigator.pushNamed(context, '/cadastro');}, child: Text("Registrar")),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<void> _login() async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      Navigator.pushReplacementNamed(context, '/register'); 
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Erro ao fazer login: $e')),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Login do Proprietário')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(labelText: 'E-mail'),
-            ),
-            TextField(
-              controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Senha'),
-              obscureText: true,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text('Login'),
-              
-            ),
-            
-            
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -104,32 +12,19 @@ class _LoginScreenState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController senhaController = TextEditingController();
 
-  // Função para validar login
-  Future<void> validarLogin() async {
+  Future<void> loginComEmailSenha() async {
     String email = emailController.text;
     String senha = senhaController.text;
 
-    // Busca o documento no Firestore usando o email
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
-        .collection('usuarios')
-        .where('email', isEqualTo: email)
-        .get();
-
-    if (snapshot.docs.isNotEmpty) {
-      // Usuário encontrado, vamos comparar as senhas
-      var usuarioData = snapshot.docs.first.data() as Map<String, dynamic>;
-
-      if (usuarioData['senha'] == senha) {
-        // Login válido
-        print('Login bem-sucedido!');
-        Navigator.pushNamed(context, '/home');
-      } else {
-        // Senha incorreta
-        print('Senha incorreta');
-      }
-    } else {
-      // Nenhum usuário com o email fornecido foi encontrado
-      print('Usuário não encontrado');
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: senha);
+      
+      // Autenticação bem-sucedida
+      print('Usuário autenticado com sucesso: ${userCredential.user?.email}');
+      Navigator.pushNamed(context, '/home');
+    } catch (e) {
+      print("Erro ao autenticar: $e");
     }
   }
 
@@ -137,7 +32,7 @@ class _LoginScreenState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -145,23 +40,27 @@ class _LoginScreenState extends State<LoginPage> {
           children: [
             TextField(
               controller: emailController,
-              decoration: InputDecoration(labelText: "Email"),
+              decoration: const InputDecoration(labelText: "Email"),
               keyboardType: TextInputType.emailAddress,
             ),
             TextField(
               controller: senhaController,
-              decoration: InputDecoration(labelText: "Senha"),
+              decoration: const InputDecoration(labelText: "Senha"),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                validarLogin(); // Chama a função para validar login
-              },
-              child: Text("Login"),
+              onPressed: loginComEmailSenha,
+              child: const Text("Login"),
             ),
-            TextButton(onPressed: () {}, child: Text("Esqueci minha senha")),
-            TextButton(onPressed: () {Navigator.pushNamed(context, '/cadastro');}, child: Text("Registrar"))
+            TextButton(
+              onPressed: () {}, 
+              child: const Text("Esqueci minha senha")),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/cadastro');
+              }, 
+              child: const Text("Registrar")),
           ],
         ),
       ),

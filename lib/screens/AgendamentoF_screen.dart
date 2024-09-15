@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 
 class AgendamentosFuturosPage extends StatelessWidget {
+  const AgendamentosFuturosPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Agendamentos Futuros")),
+      appBar: AppBar(title: const Text("Agendamentos Futuros")),
       body: ListView(
         children: [
           ListTile(
-            title: Text("Corte de Cabelo - Maria"),
-            subtitle: Text("02/09/2024 - 15:00"),
+            title: const Text("Corte de Cabelo - Maria"),
+            subtitle: const Text("02/09/2024 - 15:00"),
             trailing: ElevatedButton(
               onPressed: () {},
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
             ),
           ),
           ListTile(
-            title: Text("Manicure - João"),
-            subtitle: Text("05/09/2024 - 10:00"),
+            title: const Text("Manicure - João"),
+            subtitle: const Text("05/09/2024 - 10:00"),
             trailing: ElevatedButton(
               onPressed: () {},
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
             ),
           ),
         ],
