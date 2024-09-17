@@ -20,11 +20,12 @@ class _LoginScreenState extends State<LoginPage> {
       UserCredential userCredential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: senha);
       
-      // Autenticação bem-sucedida
-      print('Usuário autenticado com sucesso: ${userCredential.user?.email}');
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Usuário autenticado com sucesso: ${userCredential.user?.email}')));
       Navigator.pushNamed(context, '/home');
     } catch (e) {
-      print("Erro ao autenticar: $e");
+     ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Erro ao autenticar: $e")));
     }
   }
 

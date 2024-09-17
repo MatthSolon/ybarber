@@ -18,7 +18,7 @@ class ServiceModel {
       id: documentId,
       nome: data['nome'],
       preco: data['preco'],
-      tempo: data['tempo'],
+      tempo: data['tempo'].toString(),
       
     );
   }

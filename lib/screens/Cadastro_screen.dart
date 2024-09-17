@@ -34,7 +34,6 @@ class CadastroPage extends StatelessWidget {
           id: usuario.uid,
           email: email,
           nome: nome,
-          senha: senha,
           telefone: telefone,
           tipo: 'cliente',
           isAvailable: true,

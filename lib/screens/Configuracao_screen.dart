@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ybarber/models/Services.dart';
+import 'package:ybarber/models/Users.dart';
 
 class ConfiguracoesPage extends StatefulWidget {
   const ConfiguracoesPage({super.key});
@@ -13,19 +14,26 @@ class ConfiguracoesPage extends StatefulWidget {
 class _ConfiguracoesPage extends State<ConfiguracoesPage> {
   final _servicoNomeController = TextEditingController();
   final _servicoPrecoController = TextEditingController();
+  final _servicoTempoController = TextEditingController();
+
   final _usuarioNomeController = TextEditingController();
-  final _employeeRoleController = TextEditingController();
+  final _usuarioTelefoneController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  Future<void> _cadastrarsevicos() async {
+  Future<void> _cadastrarServicos() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseFirestore.instance.collection('Servicos').add({
-          'name': _servicoNomeController.text,
-          'price': double.parse(_servicoPrecoController.text),
-        });
+        ServiceModel servico = ServiceModel(
+          id: '', 
+          nome: _servicoNomeController.text,
+          preco: double.parse(_servicoPrecoController.text),
+          tempo: _servicoTempoController.text,
+        );
+
+        await FirebaseFirestore.instance.collection('Servicos').add(servico.toMap());
+
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text('Serviço cadastrado com sucesso!')),
+          SnackBar(content: Text('Serviço cadastrado com sucesso!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -35,16 +43,22 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
     }
   }
 
-  Future<void> _cadastrarfuncionario() async {
+  Future<void> _cadastrarFuncionario() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await FirebaseFirestore.instance.collection('employees').add({
-          'name': _usuarioNomeController.text,
-          'role': _employeeRoleController.text,
-          'isAvailable': true,
-        });
+        UsersModel funcionario = UsersModel(
+          id: '', 
+          email: '', 
+          nome: _usuarioNomeController.text,
+          telefone: _usuarioTelefoneController.text,
+          tipo: 'funcionario',
+          isAvailable: true,
+        );
+
+        await FirebaseFirestore.instance.collection('employees').add(funcionario.toMap());
+
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Funcionário cadastrado com sucesso!')),
+          SnackBar(content: Text('Funcionário cadastrado com sucesso!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -78,78 +92,84 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData && snapshot.data == true) {
           return Scaffold(
-              appBar: AppBar(
-                  title: const Text('Cadastro de Serviços e Funcionários')),
-              body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: _formKey,
-                  child: ListView(
-                    children: [
-                      const Text('Cadastrar Serviço',
-                          style: TextStyle(fontSize: 18)),
-                      TextFormField(
-                        controller: _servicoNomeController,
-                        decoration:
-                            const InputDecoration(labelText: 'Nome do Serviço'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o nome do serviço';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: _servicoPrecoController,
-                        decoration: const InputDecoration(
-                            labelText: 'Preço do Serviço'),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o preço';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: _cadastrarsevicos,
-                        child: const Text('Cadastrar Serviço'),
-                      ),
-                      const SizedBox(height: 32),
-                      const Text('Cadastrar Funcionário',
-                          style: TextStyle(fontSize: 18)),
-                      TextFormField(
-                        controller: _usuarioNomeController,
-                        decoration: const InputDecoration(
-                            labelText: 'Nome do Funcionário'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira o nome do funcionário';
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: _employeeRoleController,
-                        decoration: const InputDecoration(
-                            labelText: 'Função do Funcionário'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Por favor, insira a função do funcionário';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: _cadastrarfuncionario,
-                        child: const Text('Cadastrar Funcionário'),
-                      ),
-                    ],
-                  ),
+            appBar: AppBar(
+              title: const Text('Cadastro de Serviços e Funcionários'),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    const Text('Cadastrar Serviço', style: TextStyle(fontSize: 18)),
+                    TextFormField(
+                      controller: _servicoNomeController,
+                      decoration: const InputDecoration(labelText: 'Nome do Serviço'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o nome do serviço';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _servicoPrecoController,
+                      decoration: const InputDecoration(labelText: 'Preço do Serviço'),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o preço';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _servicoTempoController,
+                      decoration: const InputDecoration(labelText: 'Tempo do Serviço'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o tempo do serviço';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _cadastrarServicos,
+                      child: const Text('Cadastrar Serviço'),
+                    ),
+                    const SizedBox(height: 32),
+                    const Text('Cadastrar Funcionário', style: TextStyle(fontSize: 18)),
+                    TextFormField(
+                      controller: _usuarioNomeController,
+                      decoration: const InputDecoration(labelText: 'Nome do Funcionário'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o nome do funcionário';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: _usuarioTelefoneController,
+                      decoration: const InputDecoration(labelText: 'telefone do Funcionário'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o telefone do funcionário';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _cadastrarFuncionario,
+                      child: const Text('Cadastrar Funcionário'),
+                    ),
+                  ],
                 ),
-              ));
+              ),
+            ),
+          );
         } else {
           return Scaffold(
             appBar: AppBar(title: Text('Acesso Negado')),
