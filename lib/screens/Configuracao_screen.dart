@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ybarber/models/Services.dart';
 
 class ConfiguracoesPage extends StatefulWidget {
   const ConfiguracoesPage({super.key});
@@ -16,17 +17,7 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
   final _employeeRoleController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-
-  @override
-  void dispose() {
-    _servicoNomeController.dispose();
-    _servicoPrecoController.dispose();
-    _usuarioNomeController.dispose();
-    _employeeRoleController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _addServicos() async {
+  Future<void> _cadastrarsevicos() async {
     if (_formKey.currentState!.validate()) {
       try {
         await FirebaseFirestore.instance.collection('Servicos').add({
@@ -34,7 +25,7 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
           'price': double.parse(_servicoPrecoController.text),
         });
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Serviço cadastrado com sucesso!')),
+           SnackBar(content: Text('Serviço cadastrado com sucesso!')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -44,13 +35,13 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
     }
   }
 
-  Future<void> _addUsers() async {
+  Future<void> _cadastrarfuncionario() async {
     if (_formKey.currentState!.validate()) {
       try {
         await FirebaseFirestore.instance.collection('employees').add({
           'name': _usuarioNomeController.text,
           'role': _employeeRoleController.text,
-          'isAvailable': true, // Padrão disponível
+          'isAvailable': true,
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Funcionário cadastrado com sucesso!')),
@@ -71,7 +62,6 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
           .where('email', isEqualTo: user.email)
           .get();
       if (snapshot.docs.isNotEmpty) {
-        // Pegue o campo 'tipo' do documento do usuário
         String tipo = snapshot.docs.first.get('tipo');
         return tipo == 'Owner';
       }
@@ -123,7 +113,7 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: _addServicos,
+                        onPressed: _cadastrarsevicos,
                         child: const Text('Cadastrar Serviço'),
                       ),
                       const SizedBox(height: 32),
@@ -153,7 +143,7 @@ class _ConfiguracoesPage extends State<ConfiguracoesPage> {
                       ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: _addUsers,
+                        onPressed: _cadastrarfuncionario,
                         child: const Text('Cadastrar Funcionário'),
                       ),
                     ],

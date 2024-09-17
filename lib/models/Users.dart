@@ -2,7 +2,6 @@ class UsersModel {
   String id;
   String email;         
   String nome;
-  String senha;
   String telefone;
   String tipo;           
   bool isAvailable;
@@ -11,7 +10,6 @@ class UsersModel {
     required this.id,
     required this.email,
     required this.nome,
-    required this.senha,
     required this.telefone,
     required this.tipo,
     required this.isAvailable,
@@ -23,7 +21,6 @@ class UsersModel {
       id: documentId,
       email: data['email'],
       nome: data['nome'],
-      senha: data['senha'],
       telefone: data['telefone'] ,
       tipo: data['tipo'],
       isAvailable: data['disponivel'],
@@ -34,7 +31,6 @@ class UsersModel {
     return {
       'email': email,
       'nome': nome,
-      'senha': senha,
       'telefone': telefone,
       'tipo': tipo,
       'disponivel': isAvailable,

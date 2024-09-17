@@ -11,6 +11,7 @@ import 'screens/login_screen.dart';
 import 'screens/Home_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const ybarber());  
   

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ybarber/models/users.dart';
 
 class CadastroPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -23,20 +24,26 @@ class CadastroPage extends StatelessWidget {
     }
 
     try {
-      // Cadastro do usuário no Firebase Authentication
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: email, password: senha);
       
       User? usuario = userCredential.user;
       
       if (usuario != null) {
-        // Armazena dados adicionais no Firestore, vinculando ao UID do usuário
-        await FirebaseFirestore.instance.collection('usuarios').doc(usuario.uid).set({
-          'email': email,
-          'nome': nome,
-          'telefone': telefone,
-          'tipo': 'cliente', // Exemplo de campo extra
-        });
+        UsersModel newUser = UsersModel(
+          id: usuario.uid,
+          email: email,
+          nome: nome,
+          senha: senha,
+          telefone: telefone,
+          tipo: 'cliente',
+          isAvailable: true,
+        );
+
+        await FirebaseFirestore.instance
+            .collection('usuarios')
+            .doc(newUser.id)
+            .set(newUser.toMap());
 
         print('Usuário cadastrado com sucesso!');
       }
@@ -48,44 +55,44 @@ class CadastroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Cadastro")),
+      appBar: AppBar(title:  Text("Cadastro")),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:  EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: emailController,
-              decoration: const InputDecoration(labelText: "Email"),
+              decoration:  InputDecoration(labelText: "Email"),
             ),
             TextField(
               controller: nomeController,
-              decoration: const InputDecoration(labelText: "Nome"),
+              decoration:  InputDecoration(labelText: "Nome"),
             ),
             TextField(
               controller: senhaController,
-              decoration: const InputDecoration(labelText: "Senha"),
+              decoration:  InputDecoration(labelText: "Senha"),
               obscureText: true,
             ),
             TextField(
               controller: confirmeSenhaController,
-              decoration: const InputDecoration(labelText: "Confirme a Senha"),
+              decoration:  InputDecoration(labelText: "Confirme a Senha"),
               obscureText: true,
             ),
             TextField(
               controller: telefoneController,
-              decoration: const InputDecoration(labelText: "Telefone"),
+              decoration:  InputDecoration(labelText: "Telefone"),
             ),
-            const SizedBox(height: 20),
+             SizedBox(height: 20),
             ElevatedButton(
               onPressed: cadastrarUsuario,
-              child: const Text("Cadastrar"),
+              child:  Text("Cadastrar"),
             ),
             TextButton(
               onPressed: () {
                 Navigator.pushNamed(context, '/login');
               }, 
-              child: const Text("Já tem login? Acessar"),
+              child:  Text("Já tem login? Acessar"),
             ),
           ],
         ),
